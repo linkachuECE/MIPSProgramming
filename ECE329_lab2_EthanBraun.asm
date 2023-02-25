@@ -44,14 +44,11 @@ main:
 	li $v0, 10
 	syscall
 	
-FUN:
-	# Set V0 to 1 initially
-	li $v0, 1
-	
+FUN:	
 	# Move stack pointer down
 	subu $sp, $sp, 12
 	
-	# Store return address and value in $a0
+	# Store return address and argument value in $a0
 	sw $ra, 0($sp)
 	sw $a0, 4($sp)
 	
@@ -74,31 +71,30 @@ FUN:
 	subi $a0, $a0, 2
 	jal FUN
 	
-	# Store 2 times return of second recursion in $t0
+	# Store 2 times the return value of the second recursion in $t0
 	sll $t0, $v0, 1
 	
-	# Get result of 4 times previous recursion from stack
+	# Retrieve result of 4 times previous recursion from stack
 	lw $t1, 8($sp)
 	
-	# Store final result in $v0
+	# Store final result in $v0a
 	addu $v0, $t0, $t1
 	
 	# Move stack pointer back up
-	lw $ra 0($sp)
-	lw $s0 4($sp)
-	addu $sp, $sp, 12
-		
-	jr $ra
+	b UP_STACK
 	
+	# Function that returns 3 if n = 1
 	ONE_OUT:
-		lw $ra 0($sp)
-		addu $sp, $sp, 12
-		
 		li $v0, 3
-		jr $ra
+		b UP_STACK
+		
+	# Function that returns 1 if n = 0
 	ZERO_OUT:
+		li $v0, 1
+		b UP_STACK
+	
+	# Function for going back up the stack
+	UP_STACK:
 		lw $ra 0($sp)
 		addu $sp, $sp, 12
-		
-		li $v0, 1
 		jr $ra
