@@ -2,7 +2,7 @@
 
 .data
 	INPUT_N: 	.asciiz	"Please enter a number as n: "
-	EQUATION: 	.asciiz	""
+	EQUATION: 	.asciiz	"Equation:\nf(n) = 4 * f(n - 1) + 2 * f(n - 2)\nf(1) = 3\nf(0) = 1\n"
 	OUTPUT_MESSAGE: .asciiz	"Output: "
 
 	result: 	.word	0
@@ -12,6 +12,11 @@ NEWLINE: .asciiz "\n"
 .text
 
 main:
+	# Display message for N input
+	li $v0, 4
+	la $a0, EQUATION
+	syscall
+	
 	# Display message for N input
 	li $v0, 4
 	la $a0, INPUT_N
